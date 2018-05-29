@@ -4,27 +4,16 @@
 
 using namespace std;
 
-vector<Move> generateMoves(TicTacToe& game) {
-    vector<Move> returnVector = vector<Move>();
-    for (int row = 0; row < 3; row++) {
-        for (int col = 0; col < 3; col++) {
-            if (game.getShape(row, col) == SHAPE_EMPTY) {
-                returnVector.push_back(Move(row, col));
-            }
-        }
-    }
 
-    return returnVector;
-}
-
-Move bestMove {0, 0};
+Move bestMove(0,0);
+int searchDepth;
 
 int alphaBeta(TicTacToe& game, int alpha, int beta, int depth, Player player) {
     if (depth == 0 || game.gameEnded()) {
         return game.getScore(player);
     }
 
-    for (Move move : generateMoves(game)) {
+    for (Move move : game.generateMoves()) {
         game.makeMove(move);
         int score = -alphaBeta(game, -beta, -alpha, depth - 1, notPlayer(player));
         game.undoMove(move);
@@ -32,14 +21,17 @@ int alphaBeta(TicTacToe& game, int alpha, int beta, int depth, Player player) {
             return beta;
         else if(score > alpha) {
             alpha = score;
-            bestMove = move;
+            if (depth == searchDepth)
+                bestMove = move;
         }
     }
     return alpha;
 }
 
 int startAlphaBeta(TicTacToe& game, int depth) {
-    cout << "Best Move : " << bestMove.x << ":" << bestMove.y << endl;
+    if (!game.generateMoves().empty())
+        bestMove = game.generateMoves()[0];
+    searchDepth = depth;
     return alphaBeta(game, -999, 999, depth, game.getTurn());
 }
 
@@ -49,11 +41,12 @@ int main(int argc, char const *argv[])
 
     TicTacToe game = TicTacToe();
 
-    for (int input; cin >> input;) {
-        if (input < 0) {
-            cout << startAlphaBeta(game, -input) << endl;
+    for (int inputx, inputy; cin >> inputx >> inputy;) {
+        if (inputx == -1) {
+            cout << startAlphaBeta(game, inputy) << endl;
+            cout << "Best Move : " << bestMove.x << ":" << bestMove.y << endl;
         } else {
-            game.makeMove(Move(input / 3, input % 3));
+            game.makeMove(Move(inputx, inputy));
             game.printBoard();
             if (game.gameEnded()) {
                 cout << game.getWinner() << endl;

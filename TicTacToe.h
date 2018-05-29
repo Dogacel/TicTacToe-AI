@@ -5,7 +5,7 @@
 #ifndef TICTACTOE_H
 #define TICTACTOE_H
 
-
+#include <vector>
 
 enum Player {
     PLAYER_NONE = -1, PLAYER_X = 0, PLAYER_O = 1
@@ -29,9 +29,9 @@ class TicTacToe {
 public:
     TicTacToe();
     int getScore(Player player);
+    std::vector<Move> generateMoves();
     Player getTurn();
     Player getWinner();
-    Shape getShape(int x, int y);
     bool gameEnded();
     bool makeMove(Move move);
     void printBoard();

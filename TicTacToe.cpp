@@ -45,6 +45,19 @@ bool TicTacToe::gameEnded() {
     return true;
 }
 
+vector<Move> TicTacToe::generateMoves() {
+    vector<Move> returnVector = vector<Move>();
+    for (int row = 0; row < 3; row++) {
+        for (int col = 0; col < 3; col++) {
+            if (board[row][col] == SHAPE_EMPTY) {
+                returnVector.push_back(Move(row, col));
+            }
+        }
+    }
+
+    return returnVector;
+}
+
 Player TicTacToe::getWinner() {
     if (board[0][0] == board[1][1]
         && board[1][1] == board[2][2]) {
@@ -81,13 +94,6 @@ int TicTacToe::getScore(Player player) {
 
 Player TicTacToe::getTurn() {
     return turnPlayer;
-}
-
-Shape TicTacToe::getShape(int x, int y) {
-    if (x >= 0 && x <= 3 && y >= 0 && x <= 3) {
-        return board[x][y];
-    }
-    return SHAPE_EMPTY;
 }
 
 Player notPlayer(Player p) {
