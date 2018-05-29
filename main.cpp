@@ -38,19 +38,28 @@ int startAlphaBeta(TicTacToe& game, int depth) {
 int main(int argc, char const *argv[])
 {
     cout << "Started !" << endl;
+    cout << "Controls: " << endl;
+    cout << "Please enter 2 integers seperated by a space," << endl;
+    cout << "Otherwise game may exit or crash." << endl;
+    cout << "Enter -1 x to search depth x with alpha-beta pruning algorithm." << endl;
+    cout << "Enter -2 0 to reset game" << endl;
+    cout << "Enter any two integers x y (-1 < x < 4 && -1 < y < 4) to make a move." << endl;
+    cout << "Input: ";
 
     TicTacToe game = TicTacToe();
 
-    for (int inputx, inputy; cin >> inputx >> inputy;) {
-        if (inputx == -1) {
+    for (int inputx, inputy; cin >> inputx >> inputy; cout << "Input: ") {
+        if (inputx == -2) {
+            game.reset();
+        } else if (inputx == -1) {
             cout << startAlphaBeta(game, inputy) << endl;
             cout << "Best Move : " << bestMove.x << ":" << bestMove.y << endl;
         } else {
             game.makeMove(Move(inputx, inputy));
             game.printBoard();
             if (game.gameEnded()) {
-                cout << game.getWinner() << endl;
-                break;
+                cout << "Player: " << game.getWinner() << " won !" << endl;
+                cout << "Enter -2 0 to restart." << endl;
             }
         }
     }
